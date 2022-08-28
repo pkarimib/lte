@@ -42,7 +42,6 @@ class SuperResolutionModel():
         # initialize weights
         if checkpoint == 'None':
             checkpoint = config['checkpoint_params']['checkpoint_path']
-        print(checkpoint)
 
         self.generator = models.make(torch.load(checkpoint)['model'], load_sd=True)
         if torch.cuda.is_available():
@@ -63,7 +62,7 @@ class SuperResolutionModel():
         """ predict and return the target RGB frame
             from a low-res version of it.
         """
-        img = transforms.ToTensor()(target_lr)
+        img = transforms.ToTensor()(target_lr).float()
         pred = batched_predict(self.generator, 
                 ((img - 0.5) / 0.5).cuda().unsqueeze(0),
                 self.coord.unsqueeze(0), self.cell_factor*self.cell.unsqueeze(0),
