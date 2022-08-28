@@ -111,8 +111,6 @@ for av_frame in container.decode(stream):
     if frame_idx % 100 == 0:
         print('total frames', frame_idx)
     frame_idx += 1
-    if frame_idx > 30:
-        break
 
 imageio.mimsave(os.path.join(args.log_dir,
                 args.output_name + '.mp4'),
