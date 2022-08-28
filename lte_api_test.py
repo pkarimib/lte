@@ -4,6 +4,7 @@ from PIL import Image
 
 import torch
 from torchvision import transforms
+import numpy as np
 
 import models
 from utils import make_coord
@@ -21,6 +22,7 @@ if __name__ == '__main__':
 
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
-    img = transforms.ToTensor()(Image.open(args.input).convert('RGB'))
+    img = np.array(Image.open(args.input).convert('RGB'))
     model = SuperResolutionModel(args.config, args.checkpoint)
-    model.predict_with_lr_video(img)
+    prediction = model.predict_with_lr_video(img)
+    Image.fromarray(prediction).save("_api_test.png")

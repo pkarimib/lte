@@ -8,7 +8,7 @@ from torchvision import transforms
 import models
 from utils import make_coord
 from test import batched_predict
-
+import numpy as np
 
 class SuperResolutionModel():
     def __init__(self, config_path, checkpoint='None'):
@@ -59,14 +59,15 @@ class SuperResolutionModel():
         return self.use_lr_video, self.lr_size
 
 
-    def predict_with_lr_video(self, img):
+    def predict_with_lr_video(self, target_lr):
         """ predict and return the target RGB frame
             from a low-res version of it.
         """
+        img = transforms.ToTensor()(target_lr)
         pred = batched_predict(self.generator, 
                 ((img - 0.5) / 0.5).cuda().unsqueeze(0),
                 self.coord.unsqueeze(0), self.cell_factor*self.cell.unsqueeze(0),
                 bsize=30000)[0]
         pred = (pred * 0.5 + 0.5).clamp(0, 1).view(self.shape[0], self.shape[1], 3).permute(2, 0, 1).cpu()
-        transforms.ToPILImage()(pred).save("wrapper.png")
-        return True
+        return np.array(transforms.ToPILImage()(pred))
+
