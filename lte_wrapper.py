@@ -50,12 +50,17 @@ class SuperResolutionModel():
         timing_enabled = True
         self.times = []
 
+
     def get_shape(self):
         return tuple(self.shape)
 
 
     def get_lr_video_info(self):
         return self.use_lr_video, self.lr_size
+
+
+    def reset(self):
+        self.times = []
 
 
     def predict_with_lr_video(self, target_lr):
