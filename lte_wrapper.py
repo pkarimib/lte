@@ -30,7 +30,7 @@ class SuperResolutionModel():
         w = int(self.lr_size * int(self.scale))
 
         self.coord = make_coord((h, w))
-        if torch.cuda.is_available:
+        if torch.cuda.is_available():
             self.coord = self.coord.cuda()
 
         self.cell = torch.ones_like(self.coord)
